@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Авторизация / Регистрация</h1>
+
+<form method="post">
+    {{ form.hidden_tag() }}
+
+    <p>
+        {{ form.email.label }}<br>
+        {{ form.email(class="form-control") }}
+    </p>
+
+    <p>
+        {{ form.password.label }}<br>
+        {{ form.password(class="form-control") }}
+    </p>
+
+    <p>
+        {{ form.remember_me() }} {{ form.remember_me.label }}
+    </p>
+
+    <p>
+        {{ form.login(class="btn btn-primary") }}
+        {{ form.register(class="btn btn-secondary") }}
+    </p>
+
+    <div style="color:red;">
+        {{ message }}
+    </div>
+</form>
+{% endblock %}

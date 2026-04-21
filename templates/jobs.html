@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список работ</title>
+</head>
+<body>
+{% for job in jobs_for_user %}
+    <p>{{ job }}</p>
+{% endfor %}
+</body>
+</html>
