@@ -1,0 +1,39 @@
+{% extends "base.html" %} {% block content %}
+<h1>Дополнение информации</h1>
+
+<form method="post">
+  {{ form.hidden_tag() }}
+
+  <p>
+    {{ form.surname.label }}<br />
+    {{ form.surname(class="form-control") }}
+  </p>
+
+  <p>
+    {{ form.name.label }}<br />
+    {{ form.name(class="form-control") }}
+  </p>
+
+  <p>
+    {{ form.age.label }}<br />
+    {{ form.age(class="form-control", type="number") }}
+  </p>
+
+  <p>
+    {{ form.position.label }}<br />
+    {{ form.position(class="form-control") }}
+  </p>
+
+  <p>
+    {{ form.speciality.label }}<br />
+    {{ form.speciality(class="form-control") }}
+  </p>
+
+  <p>
+    {{ form.address.label }}<br />
+    {{ form.address(class="form-control") }}
+  </p>
+
+  <p>{{ form.submit(class="btn btn-primary") }}</p>
+</form>
+{% endblock %}

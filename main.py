@@ -39,6 +39,15 @@ class AuthForm(FlaskForm):
     login = SubmitField('Войти')
     register = SubmitField('Зарегистрироваться')
 
+class RegisterForm(FlaskForm):
+    surname = StringField('Фамилия', validators=[DataRequired()])
+    name = StringField('Имя', validators=[DataRequired()])
+    age = IntegerField('Возраст', validators=[DataRequired()])
+    position = StringField('Должность', validators=[DataRequired()])
+    speciality = StringField('Специальность', validators=[DataRequired()])
+    address = StringField('Адрес', validators=[DataRequired()])
+    
+    submit = SubmitField('Сохранить')
 
 class AddJobForm(FlaskForm):
     job = StringField('Задача', validators=[DataRequired()])
@@ -109,6 +118,27 @@ def add_job():
 
     return render_template("add_job.html", form=form)
 
+@app.route('/complete_profile', methods=['GET', 'POST'])
+@login_required
+def complete_profile():
+    form = RegisterForm(obj=current_user)
+
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user = db_sess.get(User, current_user.id)
+
+        if user:
+            user.surname = form.surname.data
+            user.name = form.name.data
+            user.age = form.age.data
+            user.position = form.position.data
+            user.speciality = form.speciality.data
+            user.address = form.address.data
+            db_sess.commit()
+
+            return redirect('/')
+
+    return render_template('complete_profile.html', form=form)
 
 @app.route('/jobs')
 @login_required
