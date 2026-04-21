@@ -24,6 +24,12 @@ def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.get(User, user_id)
 
+@app.route('/')
+@login_required
+def main():
+    session = db_session.create_session()
+    logs = session.query(Jobs).all()
+    return render_template('table.html', logs=logs)
 
 class AuthForm(FlaskForm):
     email = EmailField('Почта', validators=[DataRequired()])
@@ -60,7 +66,7 @@ def login():
 
             if user and user.check_password(form.password.data):
                 login_user(user)
-                return redirect('/jobs')
+                return redirect('/')
 
             message = "Неверный логин или пароль"
 
@@ -76,7 +82,7 @@ def login():
                 db_sess.commit()
 
                 login_user(user) 
-                return redirect('/jobs')
+                return redirect('/')
 
     return render_template('login.html', form=form, message=message)
 

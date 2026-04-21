@@ -1,26 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 align="center">Works log</h1>
-{% for action in logs %}
-<table width="50%" border="1px">
-    <tr class="headers_of_tables">
-    <td colspan="5">Action # {{ action.id }}</td>
+<h1>Works log</h1>
+
+<table border="1" style="width: 100%; border-collapse: collapse;">
+    <tr style="background-color: #333; color: white;">
+        <th>Title of activity</th>
+        <th>Team leader</th>
+        <th>Duration</th>
+        <th>List of collaborators</th>
+        <th>Is finished</th>
     </tr>
+    
+    {% for log in logs %}
     <tr>
-        <td bgcolor="grey">Title of activity</td>
-        <td bgcolor="grey">Team leader</td>
-        <td bgcolor="grey"> Duration</td>
-        <td bgcolor="grey">List of collaborators</td>
-        <td bgcolor="grey">if finished</td>
+        <td>{{ log.job }}</td>
+        
+        <td>{{ log.team_leader_id }}</td>
+        
+        <td>{{ log.work_size }}</td>
+
+        <td>{{ log.collaborators }}</td>
+        
+        <td>{{ 'Да' if log.is_finished == 1 else 'Нет' }}</td>
     </tr>
+    {% else %}
     <tr>
-        <td>{{ action.title }}</td>
-        <td>{{ action.names}}</td>
-        <td>{{ action.Duration }}</td>
-        <td>{{ action.list_of_collaborators }}</td>
-        <td>{{ action.if_finished }}</td>
+        <td colspan="5" style="text-align: center;">Записей пока нет</td>
     </tr>
+    {% endfor %}
 </table>
-{% endfor %}
 {% endblock %}
