@@ -117,6 +117,31 @@ def add_job():
         return redirect("/jobs")
 
     return render_template("add_job.html", form=form)
+@app.route('/edit_job/<int:job_id>', methods=['GET', 'POST'])
+def edit_job(job_id):
+    db_sess = db_session.create_session()
+    job = db_sess.get(Jobs, job_id)
+
+    if not job:
+        return "Задача не найдена"
+    
+    if job.team_leader_id != current_user.id or current_user.id != 1:
+        return "У вас нет прав для редактирования этой задачи", 403
+
+    form = AddJobForm(obj=job)
+
+    if form.validate_on_submit():
+        job.job = form.job.data
+        job.work_size = form.work_size.data
+        job.collaborators = form.collaborators.data
+        job.start_date = form.start_date.data
+        job.end_date = form.end_date.data
+        job.is_finished = form.is_finished.data
+
+        db_sess.commit()
+        return redirect("/jobs")
+
+    return render_template("edit_job.html", form=form, job_id=job_id)
 
 @app.route('/complete_profile', methods=['GET', 'POST'])
 @login_required
