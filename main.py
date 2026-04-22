@@ -143,6 +143,21 @@ def edit_job(job_id):
 
     return render_template("edit_job.html", form=form, job_id=job_id)
 
+@app.route('/delete_job/<int:job_id>', methods=['POST'])
+def delete_job(job_id):
+    db_sess = db_session.create_session()
+    job = db_sess.get(Jobs, job_id)
+
+    if not job:
+        return "Задача не найдена"
+    
+    if job.team_leader_id != current_user.id or current_user.id != 1:
+        return "У вас нет прав для удаления этой задачи", 403
+
+    db_sess.delete(job)
+    db_sess.commit()
+    return redirect("/jobs")
+
 @app.route('/complete_profile', methods=['GET', 'POST'])
 @login_required
 def complete_profile():
