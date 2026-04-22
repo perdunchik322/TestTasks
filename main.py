@@ -12,6 +12,7 @@ from data import db_session
 import flask
 from flask_wtf.csrf import generate_csrf
 from flask_login import login_required
+from api.blueprint import jobs_blueprint
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'fdsafsd'
@@ -195,4 +196,5 @@ def jobs():
 
 if __name__ == '__main__':
     db_session.global_init("db/blogs.db")
+    app.register_blueprint(jobs_blueprint)
     app.run(host='127.0.0.1', port=8080, debug=True)
