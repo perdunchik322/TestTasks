@@ -10,26 +10,15 @@ from data.user import User
 from data.jobs import Jobs
 from data import db_session
 import flask
+from flask_wtf.csrf import generate_csrf
 from flask_login import login_required
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'fdsafsd'
+app.config['WTF_CSRF_ENABLED'] = True 
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    db_sess = db_session.create_session()
-    return db_sess.get(User, user_id)
-
-@app.route('/')
-@login_required
-def main():
-    session = db_session.create_session()
-    logs = session.query(Jobs).all()
-    return render_template('table.html', logs=logs)
 
 class AuthForm(FlaskForm):
     email = EmailField('Почта', validators=[DataRequired()])
@@ -57,6 +46,19 @@ class AddJobForm(FlaskForm):
     end_date = DateTimeField("Дата дедлайна", validators=[DataRequired()])
     is_finished = BooleanField("Закончена ли")
     submit = SubmitField("Сохранить")
+
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.get(User, user_id)
+
+@app.route('/')
+@login_required
+def main():
+    session = db_session.create_session()
+    logs = session.query(Jobs).all()
+    csrf_token_val = generate_csrf()
+    return render_template('index.html', logs=logs, csrf_token_val=csrf_token_val)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -114,7 +116,7 @@ def add_job():
         db_sess.add(job)
         db_sess.commit()
 
-        return redirect("/jobs")
+        return redirect("/")
 
     return render_template("add_job.html", form=form)
 @app.route('/edit_job/<int:job_id>', methods=['GET', 'POST'])
@@ -139,7 +141,7 @@ def edit_job(job_id):
         job.is_finished = form.is_finished.data
 
         db_sess.commit()
-        return redirect("/jobs")
+        return redirect("/")
 
     return render_template("edit_job.html", form=form, job_id=job_id)
 
@@ -156,7 +158,7 @@ def delete_job(job_id):
 
     db_sess.delete(job)
     db_sess.commit()
-    return redirect("/jobs")
+    return redirect("/")
 
 @app.route('/complete_profile', methods=['GET', 'POST'])
 @login_required

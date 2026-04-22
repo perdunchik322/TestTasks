@@ -1,0 +1,57 @@
+{% extends "base.html" %} {% block content %}
+<h1>Works log</h1>
+
+<div style="margin-bottom: 15px">
+  <a href="/add_job" class="btn btn-success">Добавить работу</a>
+</div>
+
+<table border="1" style="width: 100%; border-collapse: collapse">
+  <tr style="background-color: #333; color: white">
+    <th>Title of activity</th>
+    <th>Team leader</th>
+    <th>Duration</th>
+    <th>Collaborators</th>
+    <th>Is finished</th>
+    <th style="width: 200px">Actions</th>
+  </tr>
+
+  {% for log in logs %}
+  <tr>
+    <td>{{ log.job }}</td>
+    <td>{{ log.team_leader_id }}</td>
+    <td>{{ log.work_size }}</td>
+    <td>{{ log.collaborators }}</td>
+    <td>{{ 'Да' if log.is_finished == 1 else 'Нет' }}</td>
+
+    <td style="white-space: nowrap">
+      {% if current_user.id == log.team_leader_id or current_user.id == 1 %}
+      <a href="/edit_job/{{ log.id }}" class="btn btn-sm btn-warning"
+        >Изменить</a
+      >
+
+      <form
+        action="/delete_job/{{ log.id }}"
+        method="post"
+        style="display: inline-block; margin: 0"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token_val }}" />
+        <button
+          type="submit"
+          class="btn btn-sm btn-danger"
+          onclick="return confirm('Удалить работу?');"
+        >
+          Удалить
+        </button>
+      </form>
+      {% else %}
+      <span style="color: gray; font-size: 0.85em">Нет прав</span>
+      {% endif %}
+    </td>
+  </tr>
+  {% else %}
+  <tr>
+    <td colspan="6" style="text-align: center">Записей пока нет</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
