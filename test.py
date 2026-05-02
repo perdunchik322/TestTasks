@@ -18,4 +18,6 @@ print(requests.post(url, json={'team_leader_id': 1000}).status_code) # 400 ош�
 print(requests.post(url, json={'team_leader_id': -1}).status_code) # 400 ошибка из-за того, что team_leader_id -1 не может быть валидным id пользователя
 print(response.status_code) # 200 если все нужные поля
 print(requests.delete(url + f"/{1}").status_code) # 200 если удаление прошло успешно
+print(requests.delete(url + f"/{1000}").status_code) # 404 ошибка из-за того, что задачи с id 1000 не существует в базе данных
+print(requests.delete(url + f"/{-1}").status_code) # 404 ошибка из-за того, что задачи с id -1 не существует в базе данных
 print(requests.get(url).json())
