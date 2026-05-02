@@ -3,10 +3,6 @@ import requests
 url = "http://127.0.0.1:8080/api/jobs"
 
 print(requests.get(url).json())
-print(requests.get(f"{url}/1").json())
-print(requests.get(f"{url}/99999").status_code)
-print(requests.get(f"{url}/abc").status_code)
-print(requests.post(url, json={}).status_code)
 print(requests.post(url, json={'team_leader_id': 1}).status_code)
 response = requests.post(url, json={
     'team_leader_id': 1,
@@ -17,5 +13,9 @@ response = requests.post(url, json={
     'end_date': '2024-01-10',
     'is_finished': False
 })
-print(f"Status: {response.status_code}")
-print(f"Response: {response.text}")
+print(requests.post(url, json={'team_leader_id': 1}).status_code) # 400 ошибка из-за отсутствия обязательных полей
+print(requests.post(url, json={'team_leader_id': 1000}).status_code) # 400 ошибка из-за того, что team_leader_id 1000 не существует в базе данных
+print(requests.post(url, json={'team_leader_id': -1}).status_code) # 400 ошибка из-за того, что team_leader_id -1 не может быть валидным id пользователя
+print(response.status_code) # 200 если все нужные поля
+print(requests.delete(url + f"/{1}").status_code) # 200 если удаление прошло успешно
+print(requests.get(url).json())
