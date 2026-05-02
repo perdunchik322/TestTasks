@@ -20,4 +20,7 @@ print(response.status_code) # 200 если все нужные поля
 print(requests.delete(url + f"/{1}").status_code) # 200 если удаление прошло успешно
 print(requests.delete(url + f"/{1000}").status_code) # 404 ошибка из-за того, что задачи с id 1000 не существует в базе данных
 print(requests.delete(url + f"/{-1}").status_code) # 404 ошибка из-за того, что задачи с id -1 не существует в базе данных
+print(requests.put(url + f"/{1}", json={'job': 'Updated job'}).status_code) # 200 если обновление прошло успешно
+print(requests.put(url + f"/{1000}", json={'job': 'Updated job'}).status_code) # 404 ошибка из-за того, что задачи с id 1000 не существует в базе данных
+print(requests.put(url + f"/{-1}", json={'job': 'Updated job'}).status_code) # 404 ошибка из-за того, что задачи с id -1 не существует в базе данных
 print(requests.get(url).json())
