@@ -1,7 +1,9 @@
 import requests
 
 url = "http://127.0.0.1:8080/api/jobs"
+url_users_api = "http://127.0.0.1:8080/api/v2/users"
 
+"""Блок проверки API для работ"""
 print(requests.get(url).json())
 print(requests.post(url, json={'team_leader_id': 1}).status_code)
 response = requests.post(url, json={
@@ -24,3 +26,9 @@ print(requests.put(url + f"/{1}", json={'job': 'Updated job'}).status_code) # 20
 print(requests.put(url + f"/{1000}", json={'job': 'Updated job'}).status_code) # 404 ошибка из-за того, что задачи с id 1000 не существует в базе данных
 print(requests.put(url + f"/{-1}", json={'job': 'Updated job'}).status_code) # 404 ошибка из-за того, что задачи с id -1 не существует в базе данных
 print(requests.get(url).json())
+
+"""Блок проверки API для пользователей"""
+print(requests.get(url_users_api).json())
+print(requests.post(url_users_api, json={'name': 'John', 'email': 'john@example.com'}).status_code)
+print(requests.delete(url_users_api + f"/{1}").status_code)
+

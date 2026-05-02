@@ -3,6 +3,7 @@ from data import db_session
 from flask import jsonify
 from .blueprint import api_blueprint
 from data.jobs import Jobs
+from data.user import User
 from flask import request
 from datetime import datetime
 
@@ -32,12 +33,21 @@ def create_job():
         return make_response(jsonify({'error': 'Bad request'}), 400)
     
     db_sess = db_session.create_session()
-    
+
+    # validate team_leader_id
+    try:
+        team_leader_id = int(request.json['team_leader_id'])
+    except Exception:
+        return make_response(jsonify({'error': 'Bad team_leader_id'}), 400)
+
+    if team_leader_id <= 0 or not db_sess.get(User, team_leader_id):
+        return make_response(jsonify({'error': 'Bad team_leader_id'}), 400)
+
     start_date = datetime.strptime(request.json['start_date'], '%Y-%m-%d')
     end_date = datetime.strptime(request.json['end_date'], '%Y-%m-%d')
-    
+
     jobs = Jobs(
-        team_leader_id=request.json['team_leader_id'],
+        team_leader_id=team_leader_id,
         job=request.json['job'],
         work_size=request.json['work_size'],
         collaborators=request.json['collaborators'],

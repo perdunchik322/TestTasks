@@ -16,3 +16,4 @@ class Jobs(SqlAlchemyBase, SerializerMixin):
     start_date = Column(DateTime)
     end_date = Column(DateTime)
     is_finished = Column(Boolean)
+    serialize_rules = ('-team_leader.jobs',)

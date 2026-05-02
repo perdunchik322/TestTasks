@@ -9,7 +9,7 @@ from flask_login import LoginManager, login_user, current_user
 from data.user import User
 from data.jobs import Jobs
 from data import db_session
-import flask
+from api.__init__api import init_api
 from flask_wtf.csrf import generate_csrf
 from flask_login import login_required
 from api.blueprint import api_blueprint
@@ -197,4 +197,5 @@ def jobs():
 if __name__ == '__main__':
     db_session.global_init("db/blogs.db")
     app.register_blueprint(api_blueprint)
+    init_api(app)
     app.run(host='127.0.0.1', port=8080, debug=True)
