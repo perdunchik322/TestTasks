@@ -2,6 +2,7 @@ import requests
 
 url = "http://127.0.0.1:8080/api/jobs"
 url_users_api = "http://127.0.0.1:8080/api/v2/users"
+url_jobs_api = "http://127.0.0.1:8080/api/v2/jobs"
 
 """Блок проверки API для работ"""
 print(requests.get(url).json())
@@ -32,3 +33,13 @@ print(requests.get(url_users_api).json())
 print(requests.post(url_users_api, json={'name': 'John', 'email': 'john@example.com'}).status_code)
 print(requests.delete(url_users_api + f"/{1}").status_code)
 
+"""Блок проверки API для работ"""
+print(requests.get(url_jobs_api).json())
+print(requests.post(url_jobs_api, json={"team_leader_id" : "1",
+                   "job" : "bruh",
+                   "work_size" : 1,
+                   "collaborators" : "me",
+                   "is_finished" : True}).status_code)
+print(requests.delete(url_jobs_api + f"/{2}").status_code) # 200
+print(requests.delete(url_jobs_api + f"/{1000}").status_code) # job isn't exist
+print(requests.delete(url_jobs_api + f"/{-1}").status_code) # job can't exist

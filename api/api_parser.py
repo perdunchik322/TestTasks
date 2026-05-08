@@ -2,6 +2,13 @@ from flask_restful import reqparse
 
 parser = reqparse.RequestParser()
 parser.add_argument('name')
+parser.add_argument("team_leader_id")
+parser.add_argument("job")
+parser.add_argument("work_size")
+parser.add_argument('collaborators')
+parser.add_argument("start_date")
+parser.add_argument("end_date")
+parser.add_argument("is_finished")
 parser.add_argument('surname')
 parser.add_argument('age')
 parser.add_argument('position')
